@@ -1,20 +1,20 @@
 package model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Equipe {
     private int id;
     private String pais;
-    private List<Atleta> atletas; // Lista de atletas da equipe
+    private ArrayList<Atleta> atletas; // Lista de atletas da equipe
 
     // Construtor
     public Equipe(int id, String pais) {
         this.id = id;
         this.pais = pais;
-        this.atletas = null;
+        this.atletas = new ArrayList<Atleta>();
     }
     
-    public Equipe(int id, String pais, List<Atleta> atletas) {
+    public Equipe(int id, String pais, ArrayList<Atleta> atletas) {
         this.id = id;
         this.pais = pais;
         this.atletas = atletas;
@@ -37,11 +37,11 @@ public class Equipe {
         this.pais = pais;
     }
 
-    public List<Atleta> getAtletas() {
+    public ArrayList<Atleta> getAtletas() {
         return atletas;
     }
 
-    public void setAtletas(List<Atleta> atletas) {
+    public void setAtletas(ArrayList<Atleta> atletas) {
         this.atletas = atletas;
     }
 
