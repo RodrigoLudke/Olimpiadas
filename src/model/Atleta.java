@@ -1,6 +1,5 @@
 package model;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,13 +9,23 @@ import database.MySQL;
 public class Atleta {
     private int id;
     private String nome;
+    private int idEquipe;
 
     // Construtor
     public Atleta() {}
+
+    public Atleta(String nome) {
+        this.nome = nome;
+    }
     
     public Atleta(int id, String nome) {
         this.id = id;
         this.nome = nome;
+    }
+    
+    public Atleta(String nome, int idEquipe) {
+        this.nome = nome;
+        this.idEquipe = idEquipe;
     }
 
     // Getters e Setters
@@ -35,43 +44,73 @@ public class Atleta {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-    public static Atleta buscaAtleta(int id)
-    {
-    	MySQL db = new MySQL();
-    	Atleta a = new Atleta();
-    	try {
-			PreparedStatement pstmt = db.conn.prepareStatement("SELECT id, nome FROM atleta WHERE id = ?");
-			pstmt.setInt(1, id);
 
-			ResultSet rs;
-			rs = pstmt.executeQuery();
-			
+    public int getIdEquipe() {
+        return idEquipe;
+    }
+
+    public void setIdEquipe(int idEquipe) {
+        this.idEquipe = idEquipe;
+    }
+    
+    /* DATABASE */
+    public void inserir() {
+        MySQL db = new MySQL();
+        
+        try {
+            db.addParametro("string", this.nome);
+            db.addParametro("int", this.idEquipe);
+            db.statement("INSERT INTO atleta(nome, idEquipe) VALUES (?, ?)");		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
+
+    public static Atleta buscaAtleta(int id) {
+    	MySQL db = new MySQL();
+    	Atleta atleta = new Atleta();
+    	try {
+            db.addParametro("int", id);
+            ResultSet rs = db.statement("SELECT id, nome FROM atleta WHERE id = ?");
+
 			if (rs.next()) {
-				 a.setId(rs.getInt("id"));
-				 a.setNome(rs.getString("nome"));
+				atleta.setId(rs.getInt("id"));
+				atleta.setNome(rs.getString("nome"));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	
-    	return a;
+    	return atleta;
     }
     
-    public static ArrayList<Atleta> listaAtletas()
-    {
+    public static ArrayList<Atleta> listaTodosAtletas() {
     	ArrayList<Atleta> atletas = new ArrayList<Atleta>();
     	MySQL db = new MySQL();
     	
     	try {
-			ResultSet rs = db.statement("SELECT id, nome FROM atleta", null);
-			
+			ResultSet rs = db.statement("SELECT id, nome FROM atleta");
 			while (rs.next()) {
-				 atletas.add(new Atleta(rs.getInt("id"), rs.getString("nome")));
+				atletas.add(new Atleta(rs.getInt("id"), rs.getString("nome")));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return atletas;
+    }
+    
+    public static ArrayList<Atleta> listaTodosAtletasEquipe(int idEquipe) {
+    	ArrayList<Atleta> atletas = new ArrayList<Atleta>();
+    	MySQL db = new MySQL();
+    	
+    	try {
+    		db.addParametro("int", idEquipe);
+    		ResultSet rs = db.statement("SELECT id, nome FROM atleta WHERE idEquipe = ?");
+			while (rs.next()) {
+				atletas.add(new Atleta(rs.getInt("id"), rs.getString("nome")));
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
     	
