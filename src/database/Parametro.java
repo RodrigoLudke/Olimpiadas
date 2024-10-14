@@ -2,8 +2,8 @@ package database;
 
 public class Parametro {
     private String tipo;
-    private Object valor; // Object armazena qualquer tipo
-
+    private Object valor;
+    
     public Parametro(String tipo, Object valor) {
         this.tipo = tipo;
         this.valor = valor;

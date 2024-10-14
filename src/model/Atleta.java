@@ -60,7 +60,11 @@ public class Atleta {
         try {
             db.addParametro("string", this.nome);
             db.addParametro("int", this.idEquipe);
-            db.statement("INSERT INTO atleta(nome, idEquipe) VALUES (?, ?)");		
+            ResultSet rs = db.statement("INSERT INTO atleta(nome, idEquipe) VALUES (?, ?)");
+
+            if (rs.next()) {
+				this.setId(rs.getInt(1));
+            }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

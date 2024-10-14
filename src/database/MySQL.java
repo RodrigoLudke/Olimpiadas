@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class MySQL {
-	public Connection conn;
+	private Connection conn;
 	private ArrayList<Parametro> parametros;
 
 	public MySQL() {
@@ -34,38 +34,6 @@ public class MySQL {
 	public void addParametro(String tipo, Object valor) {
 		this.parametros.add(new Parametro(tipo, valor));
 	}
-
-	/*
-	protected void fechaResultSet(ResultSet rs) {
-		if (rs != null) {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	protected void fechaStatement(Statement stmt) {
-		if (stmt != null) {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	protected void fechaPreparedStatement(PreparedStatement pstmt) {
-		if (pstmt != null) {
-			try {
-				pstmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	*/
 	
 	public ResultSet statement(String query) throws SQLException {
 		PreparedStatement pstmt = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);

@@ -9,6 +9,7 @@ import database.MySQL;
 public class Equipe {
     private int id;
     private String pais;
+    private int idModalidade;
     private ArrayList<Atleta> atletas; // Lista de atletas da equipe
 
     // Construtor
@@ -16,20 +17,23 @@ public class Equipe {
         this.atletas = new ArrayList<Atleta>();
     }
 
-    public Equipe( String pais) {
+    public Equipe(String pais, int idModalidade) {
     	this.pais = pais;
+        this.idModalidade = idModalidade;
         this.atletas = new ArrayList<Atleta>();
     }
     
-    public Equipe(int id, String pais) {
+    public Equipe(int id, String pais, int idModalidade) {
         this.id = id;
         this.pais = pais;
+        this.idModalidade = idModalidade;
         this.atletas = new ArrayList<Atleta>();
     }
     
-    public Equipe(int id, String pais, ArrayList<Atleta> atletas) {
+    public Equipe(int id, String pais, int idModalidade, ArrayList<Atleta> atletas) {
         this.id = id;
         this.pais = pais;
+        this.idModalidade = idModalidade;
         this.atletas = atletas;
     }
 
@@ -48,6 +52,14 @@ public class Equipe {
 
     public void setPais(String pais) {
         this.pais = pais;
+    }
+
+    public int getIdModalidade() {
+        return idModalidade;
+    }
+
+    public void setIdModalidade(int idModalidade) {
+        this.idModalidade = idModalidade;
     }
 
     public ArrayList<Atleta> getAtletas() {
@@ -74,7 +86,8 @@ public class Equipe {
         
         try {
             db.addParametro("string", this.pais);
-            ResultSet rs = db.statement("INSERT INTO equipe(pais) VALUES (?)");
+            db.addParametro("int", this.idModalidade);
+            ResultSet rs = db.statement("INSERT INTO equipe(pais, idModalidade) VALUES (?, ?)");
             
             if (rs.next()) {
 				this.setId(rs.getInt(1));
@@ -94,11 +107,12 @@ public class Equipe {
     	Equipe equipe = new Equipe();
     	try {
             db.addParametro("int", id);
-            ResultSet rs = db.statement("SELECT id, pais FROM equipe WHERE id = ?");
+            ResultSet rs = db.statement("SELECT id, pais, idModalidade FROM equipe WHERE id = ?");
 
 			if (rs.next()) {
 				equipe.setId(rs.getInt("id"));
 				equipe.setPais(rs.getString("pais"));
+                equipe.setIdModalidade(rs.getInt("idModalidade"));
 				equipe.setAtletas(Atleta.listaTodosAtletasEquipe(id));
 			}
 		} catch (SQLException e) {
@@ -113,9 +127,29 @@ public class Equipe {
     	MySQL db = new MySQL();
     	
     	try {
-			ResultSet rs = db.statement("SELECT id, pais FROM equipe");
+			ResultSet rs = db.statement("SELECT id, pais, idModalidade FROM equipe");
 			while (rs.next()) {
-				Equipe temp = new Equipe(rs.getInt("id"), rs.getString("pais"));
+				Equipe temp = new Equipe(rs.getInt("id"), rs.getString("pais"), rs.getInt("idModalidade"));
+				temp.setAtletas(Atleta.listaTodosAtletasEquipe(temp.id));
+				
+				equipe.add(temp);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	
+    	return equipe;
+    }
+
+    public static ArrayList<Equipe> listaTodasEquipesModaliade(int idModalidade) {
+    	ArrayList<Equipe> equipe = new ArrayList<Equipe>();
+    	MySQL db = new MySQL();
+    	
+    	try {
+            db.addParametro("int", idModalidade);
+			ResultSet rs = db.statement("SELECT id, pais, idModalidade FROM equipe WHERE idModalidade = ?");
+			while (rs.next()) {
+				Equipe temp = new Equipe(rs.getInt("id"), rs.getString("pais"), rs.getInt("idModalidade"));
 				temp.setAtletas(Atleta.listaTodosAtletasEquipe(temp.id));
 				
 				equipe.add(temp);
