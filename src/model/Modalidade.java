@@ -42,8 +42,8 @@ public class Modalidade {
         this.modalidade = modalidade;
     }
 
-     public String getNumeroAtletas() {
-        return modalidade;
+     public int getNumeroAtletas() {
+        return numeroAtletas;
     }
 
     public void setNumeroAtletas(int numeroAtletas) {

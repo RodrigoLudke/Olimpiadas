@@ -60,7 +60,7 @@ public class Placar {
 	    MySQL db = new MySQL();
 
 	    try {
-	        if (this.equipe1.getIdModalidade() != this.equipe2.getIdModalidade()) {
+	        if (this.equipe1.getModalidade().getId() != this.equipe2.getModalidade().getId()) {
 	            throw new Exception("As equipes são de modalidades diferentes");
 	        }
 
@@ -78,7 +78,6 @@ public class Placar {
 	        e.printStackTrace();
 	    }
 	}
-
 
     public static Placar buscaPlacar(Equipe equipe1, Equipe equipe2) {
     	MySQL db = new MySQL();
@@ -172,7 +171,7 @@ public class Placar {
     	return placares;
     }
     
-	
+    
     // Método para exibir informações
     public void exibirInformacoes() {
         System.out.println("+--------------------");
