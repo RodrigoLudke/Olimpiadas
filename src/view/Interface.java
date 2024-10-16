@@ -1,8 +1,17 @@
 package view;
 
-
 import java.awt.*;
 import javax.swing.*;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import model.Atleta;
+import model.Equipe;
+import model.Medalha;
+import model.Modalidade;
+import model.Placar;
+
 
 public class Interface extends JFrame {
 
@@ -100,7 +109,11 @@ public class Interface extends JFrame {
     }
 
     private void listarModalidades() {
-        JOptionPane.showMessageDialog(this, "Funcionalidade 'Listar Modalidades' ainda não implementada.");
+        //JOptionPane.showMessageDialog(this, "Funcionalidade 'Listar Modalidades' ainda não implementada.");
+    	ArrayList<Modalidade> modalidades = Modalidade.listaTodasModalidades();
+        for (Modalidade modalidade : modalidades) {
+            modalidade.exibirInformacoes();
+        }
     }
 
     private void criarEquipe() {
@@ -112,7 +125,11 @@ public class Interface extends JFrame {
     }
 
     private void listarEquipes() {
-        JOptionPane.showMessageDialog(this, "Funcionalidade 'Listar Equipes' ainda não implementada.");
+        //JOptionPane.showMessageDialog(this, "Funcionalidade 'Listar Equipes' ainda não implementada.");
+    	ArrayList<Equipe> equipes = Equipe.listaTodasEquipes();
+        for (Equipe equipe : equipes) {
+            equipe.exibirInformacoes();
+        }
     }
 
     private void criarPlacar() {
@@ -124,7 +141,11 @@ public class Interface extends JFrame {
     }
 
     private void listarPlacares() {
-        JOptionPane.showMessageDialog(this, "Funcionalidade 'Listar Placares' ainda não implementada.");
+        //JOptionPane.showMessageDialog(this, "Funcionalidade 'Listar Placares' ainda não implementada.");
+    	ArrayList<Placar> placares = Placar.listaTodosPlacares();
+	        for (Placar placar : placares) {
+	            placar.exibirInformacoes();
+	        }
     }
 
     public static void main(String[] args) {
