@@ -9,7 +9,7 @@ import model.Medalha;
 import model.Modalidade;
 import model.Placar;
 
-public class Inteface {
+public class IntefaceConsole {
 	
 	public static void main(String[] args) {	
 		/*
