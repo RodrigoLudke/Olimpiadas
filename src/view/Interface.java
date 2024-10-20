@@ -19,7 +19,7 @@ public class Interface extends JFrame {
 
     public Interface() {
         setTitle("Sistema de Modalidades Esportivas");
-        setSize(400, 500);
+        setSize(400, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -101,7 +101,8 @@ public class Interface extends JFrame {
 
     // Funções placeholders para cada ação
     private void criarModalidade() {
-        JOptionPane.showMessageDialog(this, "Funcionalidade 'Criar Modalidade' ainda não implementada.");
+        //JOptionPane.showMessageDialog(this, "Funcionalidade 'Criar Modalidade' ainda não implementada.");
+    	(new InterfaceModalidade()).inserir();
     }
 
     private void exibirModalidadePorId() {
