@@ -3,24 +3,40 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import model.Modalidade;
 
 public class InterfaceModalidade extends JFrame {
-    private JButton botao;
-    private JTextField iModalidade = new JTextField(20);
-    private JTextField iNumero = new JTextField(20);
-    private JLabel lModalidade = new JLabel("Nome da Modalidade:");
-    private JLabel lNumero = new JLabel("Número de Atletas:");
-    private JLabel erroLabel = new JLabel(""); // Exibir mensagens de erro
+	private static final long serialVersionUID = 1L;
+	private JLabel erroLabel = new JLabel(""); // Exibir mensagens de erro
+	
+	public InterfaceModalidade() {}
 
-    public InterfaceModalidade() {
-        
+    private void setPanel(String title, int with, int height) {
+    	// Configurações da Janela
+    	this.setTitle(title);
+        this.setSize(with, height);
+        this.setLocationRelativeTo(null); // Centraliza na tela
+        this.setVisible(true);
     }
+    
+    private void setPanel(String title) {
+    	setPanel(title, 400, 300);
+    }
+    
+    public void criar() {
+    	setPanel("Cadastro de Modalidade");
 
-    public void inserir() {
-        botao = new JButton("Cadastrar");
-
+        JLabel lModalidade = new JLabel("Nome da Modalidade:");
+    	JTextField iModalidade = new JTextField(20);
+        JLabel lNumero = new JLabel("Número de Atletas:");
+        JTextField iNumero = new JTextField(20);
+        JButton botao = new JButton("Cadastrar");
+        
         // Configuração do layout com GridBagLayout
         Container c = this.getContentPane();
         c.setLayout(new GridBagLayout());
@@ -28,17 +44,14 @@ public class InterfaceModalidade extends JFrame {
         gbc.insets = new Insets(0, 0, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Nome da Modalidade
         gbc.gridy = 0;
         c.add(lModalidade, gbc);
         c.add(iModalidade, gbc);
 
-        // Número de Atletas
         gbc.gridy = 1;
         c.add(lNumero, gbc);
         c.add(iNumero, gbc);
 
-        // Botão de Cadastrar
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER; // Centraliza o botão
@@ -70,6 +83,7 @@ public class InterfaceModalidade extends JFrame {
                     m.inserir();
                     
                     JOptionPane.showMessageDialog(null, "Modalidade cadastrada com sucesso!");
+                    dispose();
                 } catch (NumberFormatException nfe) {
                     erroLabel.setText("Número de atletas deve ser um valor numérico.");
                 } catch (Exception ex) {
@@ -77,12 +91,114 @@ public class InterfaceModalidade extends JFrame {
                 }
             }
         });
+    }
 
-        // Configurações da Janela
-        this.setTitle("Cadastro de Modalidade");
-        this.setSize(400, 300);
-        this.setLocationRelativeTo(null); // Centraliza na tela
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
+    public void buscar() {
+        setPanel("Buscar Modalidade");
+
+        JLabel lModalidade = new JLabel("ID da Modalidade:");
+        JTextField iModalidade = new JTextField(20);
+        JButton botao = new JButton("Buscar");
+
+        // Configuração do layout com GridBagLayout
+        Container c = this.getContentPane();
+        c.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);  // Margens internas
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Campo para ID da Modalidade
+        gbc.gridy = 0;
+        c.add(lModalidade, gbc);
+        c.add(iModalidade, gbc);
+
+        // Botão de Buscar
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;  // Centralizar botão
+        c.add(botao, gbc);
+
+        // Label para erros
+        gbc.gridy = 2;
+        erroLabel.setForeground(Color.RED);
+        c.add(erroLabel, gbc);
+
+        // Adiciona uma área para exibir os resultados dinamicamente
+        JPanel resultadoPanel = new JPanel(new GridBagLayout());
+        gbc.gridy = 3;
+        c.add(resultadoPanel, gbc);
+
+        // Ação do botão Buscar
+        botao.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    erroLabel.setText("");
+                    resultadoPanel.removeAll();
+
+                    int id = Integer.parseInt(iModalidade.getText());
+                    Modalidade modalidade = Modalidade.buscaModalidade(id);
+                    
+                    if (modalidade.getId() == 0) {
+                    	throw new Exception("Nenhuma MODALIDADE encontrada com este ID");
+                    }
+
+                    GridBagConstraints resultGbc = new GridBagConstraints();
+                    resultGbc.insets = new Insets(5, 5, 5, 5);
+                    resultGbc.anchor = GridBagConstraints.WEST;
+
+                    resultGbc.gridy = 0;
+                    JTextField nome = new JTextField(modalidade.getModalidade(), 20);
+                    nome.setEditable(false);
+                    resultadoPanel.add(new JLabel("Nome da Modalidade:"), resultGbc);
+                    resultadoPanel.add(nome, resultGbc);
+
+                    resultGbc.gridy = 1;
+                    JTextField numeroAtletas = new JTextField(Integer.toString(modalidade.getNumeroAtletas()), 20);
+                    numeroAtletas.setEditable(false);
+                    resultadoPanel.add(new JLabel("Número de Atletas:"), resultGbc);
+                    resultadoPanel.add(numeroAtletas, resultGbc);
+
+                    // Atualizar o layout com os novos componentes
+                    resultadoPanel.revalidate();
+                    resultadoPanel.repaint();
+
+                } catch (NumberFormatException nfe) {
+                    erroLabel.setText("ID deve ser um valor numérico.");
+                } catch (Exception ex) {
+                    erroLabel.setText(ex.getMessage());
+                }
+            }
+        });
+    }
+
+
+    public void listar() {
+    	setPanel("Lista de Modalidades");
+        
+    	JTable tabela;
+    	DefaultTableModel dados;
+
+        // Cria o modelo da tabela
+        dados = new DefaultTableModel(new String[]{"ID", "Modalidade", "Número de Atletas", "É Coletivo"}, 0);
+        tabela = new JTable(dados);
+        
+        ArrayList<Modalidade> modalidades = Modalidade.listaTodasModalidades();
+        for (Modalidade modalidade : modalidades) {
+        	dados.addRow(new Object[]{
+                modalidade.getId(),
+                modalidade.getModalidade(),
+                modalidade.getNumeroAtletas(),
+                modalidade.isColetivo()
+            });
+        }
+
+        // Adiciona a tabela dentro de um JScrollPane (para rolagem)
+        JScrollPane scrollPane = new JScrollPane(tabela);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Torna a janela visível
+        setVisible(true);
     }
 }

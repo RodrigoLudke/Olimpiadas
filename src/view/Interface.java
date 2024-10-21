@@ -4,12 +4,10 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import model.Atleta;
 import model.Equipe;
 import model.Medalha;
-import model.Modalidade;
 import model.Placar;
 
 
@@ -101,20 +99,15 @@ public class Interface extends JFrame {
 
     // Funções placeholders para cada ação
     private void criarModalidade() {
-        //JOptionPane.showMessageDialog(this, "Funcionalidade 'Criar Modalidade' ainda não implementada.");
-    	(new InterfaceModalidade()).inserir();
+    	(new InterfaceModalidade()).criar();
     }
 
     private void exibirModalidadePorId() {
-        JOptionPane.showMessageDialog(this, "Funcionalidade 'Exibir Modalidade por ID' ainda não implementada.");
+    	(new InterfaceModalidade()).buscar();
     }
 
     private void listarModalidades() {
-        //JOptionPane.showMessageDialog(this, "Funcionalidade 'Listar Modalidades' ainda não implementada.");
-    	ArrayList<Modalidade> modalidades = Modalidade.listaTodasModalidades();
-        for (Modalidade modalidade : modalidades) {
-            modalidade.exibirInformacoes();
-        }
+    	(new InterfaceModalidade()).listar();
     }
 
     private void criarEquipe() {
