@@ -194,11 +194,12 @@ public class InterfaceModalidade extends JFrame {
             });
         }
 
+        tabela.setAutoCreateRowSorter(true);
+        tabela.setFillsViewportHeight(true);
+		
         // Adiciona a tabela dentro de um JScrollPane (para rolagem)
         JScrollPane scrollPane = new JScrollPane(tabela);
+		this.getContentPane().add(scrollPane);
         add(scrollPane, BorderLayout.CENTER);
-
-        // Torna a janela visível
-        setVisible(true);
     }
 }
