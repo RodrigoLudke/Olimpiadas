@@ -4,39 +4,38 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
+import model.Equipe;
 import model.Modalidade;
 
-public class InterfaceModalidade extends JFrame {
-	private static final long serialVersionUID = 1L;
-	private JLabel erroLabel = new JLabel(""); // Exibir mensagens de erro
-	
-	public InterfaceModalidade() {}
+public class InterfaceEquipe extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JLabel erroLabel = new JLabel(""); // Exibir mensagens de erro
 
-    private void setPanel(String title, int with, int height) {
-    	// Configurações da Janela
-    	this.setTitle(title);
-        this.setSize(with, height);
+    public InterfaceEquipe() {}
+
+    private void setPanel(String title, int width, int height) {
+        // Configurações da Janela
+        this.setTitle(title);
+        this.setSize(width, height);
         this.setLocationRelativeTo(null); // Centraliza na tela
         this.setVisible(true);
     }
-    
-    private void setPanel(String title) {
-    	setPanel(title, 400, 300);
-    }
-    
-    public void criar() {
-    	setPanel("Cadastro de Modalidade");
 
-        JLabel lModalidade = new JLabel("Nome da Modalidade:");
-    	JTextField iModalidade = new JTextField(20);
-        JLabel lNumero = new JLabel("Número de Atletas:");
-        JTextField iNumero = new JTextField(20);
+    private void setPanel(String title) {
+        setPanel(title, 400, 300);
+    }
+
+    public void criarEquipe() {
+        setPanel("Cadastro de Equipe");
+
+        JLabel lpais = new JLabel("Nome do País:");
+        JTextField ipais = new JTextField(20);
+        JLabel lidModalidade = new JLabel("ID da Modalidade:");
+        JTextField iidModalidade = new JTextField(20);
         JButton botao = new JButton("Cadastrar");
-        
+
         // Configuração do layout com GridBagLayout
         Container c = this.getContentPane();
         c.setLayout(new GridBagLayout());
@@ -45,12 +44,12 @@ public class InterfaceModalidade extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
 
         gbc.gridy = 0;
-        c.add(lModalidade, gbc);
-        c.add(iModalidade, gbc);
+        c.add(lpais, gbc);
+        c.add(ipais, gbc);
 
         gbc.gridy = 1;
-        c.add(lNumero, gbc);
-        c.add(iNumero, gbc);
+        c.add(lidModalidade, gbc);
+        c.add(iidModalidade, gbc);
 
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -70,22 +69,30 @@ public class InterfaceModalidade extends JFrame {
                     // Limpa a mensagem de erro antes de cada tentativa
                     erroLabel.setText("");
 
-                    // Cria uma nova modalidade
-                    String nome = iModalidade.getText();
-                    
-                    if (nome.isEmpty()) {
-                        throw new Exception("Nome da modalidade não pode ser vazio.");
-                    }
-                    
-                    int numeroAtletas = Integer.parseInt(iNumero.getText());
+                    // Cria uma nova equipe
+                    String nomePais = ipais.getText();
 
-                    Modalidade m = new Modalidade(nome, numeroAtletas);
-                    m.inserir();
-                    
-                    JOptionPane.showMessageDialog(null, "Modalidade cadastrada com sucesso!");
+                    if (nomePais.isEmpty()) {
+                        throw new Exception("País não pode ser vazio.");
+                    }
+
+                    int numeroModalidade = Integer.parseInt(iidModalidade.getText());
+                    Modalidade modalidade = Modalidade.buscaModalidade(numeroModalidade);
+                   /*
+                    if (modalidade == null) {
+                        throw new Exception("Modalidade com ID " + numeroModalidade + " não encontrada.");
+                    }
+
+                    */
+                    System.out.println("Modalidade encontrada: ID = " + modalidade.getId());
+
+                    Equipe equipe = new Equipe(nomePais, modalidade);
+                    equipe.inserir();
+
+                    JOptionPane.showMessageDialog(null, "Equipe cadastrada com sucesso!");
                     dispose();
                 } catch (NumberFormatException nfe) {
-                    erroLabel.setText("Número de atletas deve ser um valor numérico.");
+                    erroLabel.setText("Id Modalidade deve ser um valor numérico.");
                 } catch (Exception ex) {
                     erroLabel.setText(ex.getMessage());
                 }
@@ -93,11 +100,11 @@ public class InterfaceModalidade extends JFrame {
         });
     }
 
-    public void buscar() {
-        setPanel("Buscar Modalidade");
+    public void exibirEquipePorId() {
+        setPanel("Buscar Equipe");
 
-        JLabel lModalidade = new JLabel("ID da Modalidade:");
-        JTextField iModalidade = new JTextField(20);
+        JLabel lEquipe = new JLabel("ID da Equipe:");
+        JTextField iEquipe = new JTextField(20);
         JButton botao = new JButton("Buscar");
 
         // Configuração do layout com GridBagLayout
@@ -107,10 +114,10 @@ public class InterfaceModalidade extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);  // Margens internas
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Campo para ID da Modalidade
+        // Campo para ID da Equipe
         gbc.gridy = 0;
-        c.add(lModalidade, gbc);
-        c.add(iModalidade, gbc);
+        c.add(lEquipe, gbc);
+        c.add(iEquipe, gbc);
 
         // Botão de Buscar
         gbc.gridy = 1;
@@ -137,11 +144,11 @@ public class InterfaceModalidade extends JFrame {
                     erroLabel.setText("");
                     resultadoPanel.removeAll();
 
-                    int id = Integer.parseInt(iModalidade.getText());
-                    Modalidade modalidade = Modalidade.buscaModalidade(id);
-                    
-                    if (modalidade.getId() == 0) {
-                    	throw new Exception("Nenhuma MODALIDADE encontrada com este ID");
+                    int id = Integer.parseInt(iEquipe.getText());
+                    Equipe equipe = Equipe.buscaEquipe(id);
+
+                    if (equipe.getId() == 0) {
+                        throw new Exception("Nenhuma EQUIPE encontrada com este ID");
                     }
 
                     GridBagConstraints resultGbc = new GridBagConstraints();
@@ -149,16 +156,16 @@ public class InterfaceModalidade extends JFrame {
                     resultGbc.anchor = GridBagConstraints.WEST;
 
                     resultGbc.gridy = 0;
-                    JTextField nome = new JTextField(modalidade.getModalidade(), 20);
+                    JTextField nome = new JTextField(equipe.getPais(), 20);
                     nome.setEditable(false);
-                    resultadoPanel.add(new JLabel("Nome da Modalidade:"), resultGbc);
+                    resultadoPanel.add(new JLabel("País da Equipe:"), resultGbc);
                     resultadoPanel.add(nome, resultGbc);
 
                     resultGbc.gridy = 1;
-                    JTextField numeroAtletas = new JTextField(Integer.toString(modalidade.getNumeroAtletas()), 20);
-                    numeroAtletas.setEditable(false);
-                    resultadoPanel.add(new JLabel("Número de Atletas:"), resultGbc);
-                    resultadoPanel.add(numeroAtletas, resultGbc);
+                    JTextField numeroJogadores = new JTextField(Integer.toString(equipe.getModalidade().getId()), 20);
+                    numeroJogadores.setEditable(false);
+                    resultadoPanel.add(new JLabel("ID da Modalidade:"), resultGbc);
+                    resultadoPanel.add(numeroJogadores, resultGbc);
 
                     // Atualizar o layout com os novos componentes
                     resultadoPanel.revalidate();
@@ -173,33 +180,31 @@ public class InterfaceModalidade extends JFrame {
         });
     }
 
+    public void listarEquipes() {
+        setPanel("Lista de Equipes");
 
-    public void listar() {
-    	setPanel("Lista de Modalidades");
-        
-    	JTable tabela;
-    	DefaultTableModel dados;
+        JTable tabela;
+        DefaultTableModel dados;
 
         // Cria o modelo da tabela
-        dados = new DefaultTableModel(new String[]{"ID", "Modalidade", "Número de Atletas", "É Coletivo"}, 0);
+        dados = new DefaultTableModel(new String[]{"ID", "País da Equipe", "ID Modalidade"}, 0);
         tabela = new JTable(dados);
-        
-        ArrayList<Modalidade> modalidades = Modalidade.listaTodasModalidades();
-        for (Modalidade modalidade : modalidades) {
-        	dados.addRow(new Object[]{
-                modalidade.getId(),
-                modalidade.getModalidade(),
-                modalidade.getNumeroAtletas(),
-                modalidade.isColetivo()
+
+        ArrayList<Equipe> equipes = Equipe.listaTodasEquipes();
+        for (Equipe equipe : equipes) {
+            dados.addRow(new Object[]{
+                    equipe.getId(),
+                    equipe.getPais(),
+                    equipe.getModalidade().getId(),
             });
         }
 
         tabela.setAutoCreateRowSorter(true);
         tabela.setFillsViewportHeight(true);
-		
+
         // Adiciona a tabela dentro de um JScrollPane (para rolagem)
         JScrollPane scrollPane = new JScrollPane(tabela);
-		this.getContentPane().add(scrollPane);
+        this.getContentPane().add(scrollPane);
         add(scrollPane, BorderLayout.CENTER);
     }
 }

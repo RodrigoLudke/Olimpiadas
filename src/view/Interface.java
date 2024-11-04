@@ -111,19 +111,15 @@ public class Interface extends JFrame {
     }
 
     private void criarEquipe() {
-        JOptionPane.showMessageDialog(this, "Funcionalidade 'Criar Equipe' ainda não implementada.");
+        (new InterfaceEquipe()).criarEquipe();
     }
 
     private void exibirEquipePorId() {
-        JOptionPane.showMessageDialog(this, "Funcionalidade 'Exibir Equipe por ID' ainda não implementada.");
+        (new InterfaceEquipe()).exibirEquipePorId();
     }
 
     private void listarEquipes() {
-        //JOptionPane.showMessageDialog(this, "Funcionalidade 'Listar Equipes' ainda não implementada.");
-    	ArrayList<Equipe> equipes = Equipe.listaTodasEquipes();
-        for (Equipe equipe : equipes) {
-            equipe.exibirInformacoes();
-        }
+        (new InterfaceEquipe()).listarEquipes();
     }
 
     private void criarPlacar() {

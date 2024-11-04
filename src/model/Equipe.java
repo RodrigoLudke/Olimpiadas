@@ -13,9 +13,7 @@ public class Equipe {
     private ArrayList<Atleta> atletas; // Lista de atletas da equipe
 
     // Construtor
-    public Equipe() {
-        this.atletas = new ArrayList<Atleta>();
-    }
+    public Equipe() {}
 
     public Equipe(String pais, Modalidade modalidade) {
     	this.pais = pais;
@@ -104,7 +102,8 @@ public class Equipe {
 
     public static Equipe buscaEquipe(int id) {
     	MySQL db = new MySQL();
-    	Equipe equipe = new Equipe();
+        Equipe equipe = new Equipe();
+
     	try {
             db.addParametro("int", id);
             ResultSet rs = db.statement("SELECT id, pais, idModalidade FROM equipe WHERE id = ?");

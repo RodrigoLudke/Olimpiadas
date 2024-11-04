@@ -15,8 +15,8 @@ public class MySQL {
 	public MySQL() {
 		String driver = "com.mysql.cj.jdbc.Driver";
 		String host = "jdbc:mysql://localhost/olimpiadas";
-		String user = "root";
-		String password = "";
+		String user = "rodrigo";
+		String password = "123456penisGG";
 
 		this.conn = null;
 		this.parametros = new ArrayList<Parametro>();
@@ -28,6 +28,8 @@ public class MySQL {
 			System.out.println("Nao foi possivel encontrar o driver JDBC");
 		} catch (SQLException se) {
 			System.out.println("Nao foi possivel conectar ao Banco de Dados");
+			System.out.println(se.getMessage());
+
 		}
 	}
 
